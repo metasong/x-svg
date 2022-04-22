@@ -1,11 +1,21 @@
 // https://stackoverflow.com/questions/68155960/slotting-a-svg-inside-another-svg-in-a-web-component#answer-68159761
+/**
+    <x-svg>
+      <circle cx="50%" cy="50%" r="50%" fill="red"></circle>
+      <circle cx="50%" cy="50%" r="40%" fill="yellow"></circle>
+      <circle slot="foo" cx="50%" cy="50%" r="30%" fill="green"></circle>
+      <circle slot="bar" cx="50%" cy="50%" r="10%" fill="gold"></circle>
+    </x-svg>
+ */
 customElements.define(
   "x-svg",
   class extends HTMLElement {
     connectedCallback() {
       //.append(document.querySelector('template').content.cloneNode(true));
       this.attachShadow({ mode: "open" }).innerHTML = `
+      
         <style>svg{ height:180px }</style>
+
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
           <slot></slot>
           <slot name="foo"></slot>
@@ -24,8 +34,8 @@ customElements.define(
         );
         svgChildren.innerHTML = this.innerHTML;
 
-        svgChildren
-          .querySelectorAll("*") // all children
+        [...svgChildren
+          .children]// all children
           .forEach((el) => {
             const name = el.getAttribute("slot");
             if (name) {
@@ -35,7 +45,7 @@ customElements.define(
               if (slot) {
                 slot.replaceWith(el);
               } else {
-                console.log(
+                console.warn(
                   `no slot of name (${name}) defined in template of ${this.tagName}`,
                   el
                 );
