@@ -36,7 +36,7 @@ customElements.define(
                 slot.replaceWith(el);
               } else {
                 console.log(
-                  `no slot of name (${name}) configured in template of ${this.tagName}`,
+                  `no slot of name (${name}) defined in template of ${this.tagName}`,
                   el
                 );
               }
